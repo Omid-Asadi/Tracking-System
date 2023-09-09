@@ -16,6 +16,13 @@ TRACKING_STATUS = (
     (TRANSIT, "Transit"),
     (DELIVERY, "Delivery"),
 )
+TRACKING_STATUS_VIEW = {
+    INBOUND_SCAN: "InBound Scan",
+    SCANNED: "Scanned",
+    IN_TRANSIT: "In Transit",
+    TRANSIT: "Transit",
+    DELIVERY: "Delivery"
+}
 
 
 class Shipper(BaseModel):
