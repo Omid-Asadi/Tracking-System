@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'cities_light',
 
     "user.apps.UserConfig",
     "order.apps.OrderConfig",
@@ -100,4 +101,4 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = "Asia/Tehran"
 CELERY_ENABLE_UTC = True
 
-AUTH_USER_MODEL = 'user.CustomUser'
+AUTH_USER_MODEL = 'user.Customer'

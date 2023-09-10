@@ -1,7 +1,6 @@
 from django.contrib import admin
-from django.contrib.auth import get_user_model
+from user.models import Customer, Retailer
 
 
-User = get_user_model()
-
-admin.site.register(User)
+admin.site.register(Customer)
+admin.site.register(Retailer)

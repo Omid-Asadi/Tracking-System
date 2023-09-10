@@ -1,13 +1,14 @@
 from django.db import models
-
 from lib.base_model import BaseModel
-from user.models import CustomUser
+from product.models import Product
+from user.models import Customer, Retailer
 
 
 class Order(BaseModel):
     order_date = models.DateTimeField('Order Date', auto_now_add=True, blank=True, null=True)
-    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="sender_orders")
-    receiver = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="receiver_orders")
+    seller = models.ForeignKey(Retailer, on_delete=models.CASCADE, related_name="seller_orders")
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_orders")
+    product = models.ManyToManyField(Product, related_name="orders")
 
     class Meta:
         verbose_name = "order"
