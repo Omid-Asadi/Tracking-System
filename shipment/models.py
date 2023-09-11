@@ -28,8 +28,7 @@ TRACKING_STATUS_VIEW = {
 class Shipper(BaseModel):
     company_name = models.CharField(max_length=128, null=True, blank=True)
     brand = models.CharField(max_length=128)
-    address = models.TextField(max_length=200, null=True, blank=True)
-    phone_number = models.CharField(max_length=32, null=True, blank=True)
+    website = models.URLField(max_length=32, null=True, blank=True)
 
     class Meta:
         verbose_name = "shipper"
@@ -40,25 +39,12 @@ class Shipper(BaseModel):
         return f"{self.brand}"
 
 
-class Tracking(BaseModel):
-    tracking_code = models.CharField(max_length=128, default=uuid.uuid4, primary_key=True, editable=False)
-    status = models.SmallIntegerField(default=0, choices=TRACKING_STATUS)
-    destination_climate = models.JSONField(null=True, blank=True)
-
-    class Meta:
-        verbose_name = "tracking"
-        verbose_name_plural = "tracking"
-        db_table = "tracking"
-
-    def __str__(self):
-        return f"ID: {self.pk}"
-
-
 class Shipment(BaseModel):
     delivery_date = models.DateTimeField("Delivery Date")
-    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="shipment")
     shipper = models.ForeignKey(Shipper, on_delete=models.SET_NULL, null=True, blank=True)
-    tracking = models.OneToOneField(Tracking, on_delete=models.SET_NULL, null=True, blank=True, related_name="shipment")
+    tracking_code = models.CharField(max_length=128, default=uuid.uuid4, primary_key=True, editable=False, unique=True)
+    status = models.SmallIntegerField(default=0, choices=TRACKING_STATUS)
 
     class Meta:
         verbose_name = "shipment"
@@ -67,5 +53,3 @@ class Shipment(BaseModel):
 
     def __str__(self):
         return f"ID: {self.pk}"
-
-

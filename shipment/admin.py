@@ -1,8 +1,6 @@
 from django.contrib import admin
-from shipment.models import Shipper, Tracking, Shipment
+from shipment.models import Shipper, Shipment
 
 
 admin.site.register(Shipper)
-admin.site.register(Tracking)
 admin.site.register(Shipment)
-

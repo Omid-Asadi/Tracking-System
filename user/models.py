@@ -1,42 +1,51 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin, AbstractUser, UserManager
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
-from django_countries.fields import CountryField
-from django.db import models
+from django.utils import timezone
 
-from lib.base_model import BaseModel
-
-USA = 0
-AUSTRALIA = 1
-
-COUNTRIES = (
-    (USA, "USA"),
-    (AUSTRALIA, "AUSTRALIA"),
-)
+username_validator = UnicodeUsernameValidator()
 
 
-class Customer(AbstractUser):
-    phone_number = models.CharField(max_length=32, blank=True, null=True)
+class Customer(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(
+        "username",
+        max_length=150,
+        unique=True,
+        help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+        validators=[username_validator],
+        error_messages={
+            "unique": "A user with that username already exists.",
+        },
+    )
+    first_name = models.CharField("first name", max_length=150, blank=True)
+    last_name = models.CharField("last name", max_length=150, blank=True)
+    email = models.EmailField('email address', unique=True)
     avatar = models.ImageField(blank=True, null=True)
-    address = models.OneToOneField("Address", on_delete=models.SET_NULL, related_name="customer")
-
-    # country = CountryField()
-    # address = models.TextField(max_length=200, blank=True, null=True)
+    phone_number = models.CharField(max_length=32, blank=True, null=True, unique=True)
+    country = models.ForeignKey('cities_light.Country', on_delete=models.SET_NULL, null=True, blank=True)
+    city = models.CharField(max_length=128, null=True, blank=True)
+    postal_code = models.CharField(max_length=100)
+    address = models.TextField(blank=True, null=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(default=timezone.now)
 
     class Meta:
         verbose_name = "Customer"
         verbose_name_plural = "Customer"
         db_table = "customer"
 
+    USERNAME_FIELD = 'username'
+    objects = UserManager()
+
     def __str__(self):
         return f"ID: {self.pk}"
 
 
 class Retailer(Customer):
-    # country = CountryField()
     seller_rate = models.SmallIntegerField("Rate", blank=True, null=True)
     seller_lead_time = models.FloatField("Seller Lead Time", blank=True, null=True)
-    address = models.OneToOneField("Address", on_delete=models.SET_NULL, related_name="customer")
 
     class Meta:
         verbose_name = "Retailer"
@@ -45,10 +54,3 @@ class Retailer(Customer):
 
     def __str__(self):
         return f"ID: {self.pk}"
-
-
-class Address(models.Model):
-    country = models.ForeignKey('cities_light.Country', on_delete=models.SET_NULL, null=True, blank=True)
-    city = models.ForeignKey('cities_light.City', on_delete=models.SET_NULL, null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
-    postal_code = models.CharField(max_length=100)
