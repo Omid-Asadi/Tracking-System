@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    'drf_yasg',
     'cities_light',
     "user.apps.UserConfig",
     "order.apps.OrderConfig",
@@ -113,5 +114,5 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '100/day',
         'user': '1000/day'
-    }
+    },
 }
