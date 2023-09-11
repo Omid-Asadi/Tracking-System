@@ -1,9 +1,6 @@
 from unittest import TestCase
 from requests import Response
 from rest_framework import status
-
-from lib.redis_tools import RedisClient
-from tracking.local_settings import REDIS_ADDRESS, REDIS_PORT, REDIS_WEATHER_DATA_DB_NUMBER
 from django.test import Client
 from django.urls import reverse
 
