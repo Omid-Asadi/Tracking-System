@@ -51,4 +51,4 @@ This project has been powered by using python 3.11, Django 4.2, OpenAPI swaggers
 
 #### 7. To fill country and city tables try to run below command: ( It's not necessary and it takes long to fetch them all.)
  ` ./manage.py cities_light --progress `
- 
+
